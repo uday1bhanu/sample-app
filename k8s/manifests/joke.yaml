@@ -1,0 +1,128 @@
+# Source: sample-joke/templates/deployment.yaml
+# Source: uday-microservice/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: "joke"
+  name: "joke"
+  
+spec:
+  ports:
+   - name: api
+     port: 8083
+     protocol: "TCP"
+     targetPort: 8083
+  selector:
+    app: "joke"
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: sample-joke/templates/deployment.yaml
+# Source: uday-microservice/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    feature: "sample"
+    app: "joke"
+  name: "joke"
+  
+spec:
+  minReadySeconds: 10
+  progressDeadlineSeconds: 360
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "joke"
+  strategy:
+    
+      rollingUpdate:
+        maxSurge: "50%"
+        maxUnavailable: "50%"
+    
+  template:
+    metadata:
+      labels:
+        app: "joke"
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8083'
+        prometheus.io/path: '/actuator/prometheus'
+    spec:
+      volumes:
+      imagePullSecrets:
+      - name: 
+      containers:
+      - name: "joke"
+        volumeMounts:
+        image: "uday1bhanu/joke:1.1.0"
+        ports:
+          - name: api
+            containerPort: 8083
+        resources:
+          limits:
+            cpu: ".5"
+            memory: "1024Mi"
+          requests:
+            cpu: ".5"
+            memory: "512Mi"
+        imagePullPolicy: "Always"
+        tty: true
+        stdin: true
+        envFrom:
+        - configMapRef:
+            name: internal-service-config
+        env:
+        - name: JAVA_MAX_MEM_RATIO
+          value: "80"
+        - name: APP_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: sampleapp-secret
+              key: username
+        - name: APP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sampleapp-secret
+              key: password
+    
+      
+        livenessProbe:
+          
+          httpGet:
+            port: 8083
+            path: /actuator/health
+            httpHeaders:
+          
+            - name: Content-Type
+              value: application/vnd.spring-boot.actuator.v2+json;charset=UTF-8
+          
+          
+          
+          initialDelaySeconds: 60
+          periodSeconds: 5
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 24
+      
+      
+        readinessProbe:
+          
+          httpGet:
+            port: 8083
+            path: /actuator/health
+            httpHeaders:
+          
+            - name: Content-Type
+              value: application/vnd.spring-boot.actuator.v2+json;charset=UTF-8
+          
+          
+          
+          initialDelaySeconds: 60
+          periodSeconds: 5
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 24

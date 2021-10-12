@@ -1,0 +1,18 @@
+# All the key value pairs under data tag will be exposed as environment variables in all k8s pods within this namespace
+#Please use double quotes for values in data.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: internal-service-config
+  
+data:
+  ABOUT_HOST: about
+  JOKE_HOST: joke
+  LOCATION_HOST: location
+  DADJOKE_HOST: dadjoke
+  GEEKJOKE_HOST: geekjoke
+  ZIPKIN_HOST: zipkin.istio-system
+  MYSQL_uday_SERVICE_HOST: localhost
+  MYSQL_uday_SERVICE_PORT: "3306"
+  USERNAME: a
+  PASSWORD: p
