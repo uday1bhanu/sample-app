@@ -1,0 +1,55 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.uday'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	springCloudVersion = 'Finchley.SR2'
+}
+
+dependencies {
+	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+	// https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp
+	compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
+	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+	compile(group: 'io.springfox', name: 'springfox-swagger2', version: '2.0.1')
+	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	compile(group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2')
+	// https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+	compile group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.0.7'
+	implementation('org.springframework.boot:spring-boot-starter-actuator')
+	implementation('org.springframework.boot:spring-boot-starter-security')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    implementation('org.springframework.cloud:spring-cloud-starter-sleuth')
+    implementation('org.springframework.cloud:spring-cloud-starter-zipkin')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
