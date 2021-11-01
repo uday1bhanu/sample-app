@@ -1,0 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: IngressGateway
+metadata:
+  name: servicemesh-1-ingress
+spec:
+  listeners:
+    - port: 8080
+      protocol: http
+      services:
+        - name: api

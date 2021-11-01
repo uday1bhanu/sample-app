@@ -1,0 +1,67 @@
+{
+  "advertise_addr": "{{ GetInterfaceIP `eth1` }}",
+  "bind_addr": "0.0.0.0",
+  "bootstrap_expect": 1,
+  "client_addr": "0.0.0.0",
+  "config_entries": [
+    {
+      "bootstrap": [
+        {
+          "config": [
+            {
+              "envoy_prometheus_bind_addr": "0.0.0.0:9102",
+              "protocol": "http"
+            }
+          ],
+          "kind": "proxy-defaults",
+          "name": "global"
+        }
+      ]
+    }
+  ], 
+  "connect": [
+    {
+      "enabled": true
+    }
+  ],
+  "data_dir": "/var/consul",
+  "datacenter": "us-east-1",
+  "domain": "consul",
+  "dns_config": {
+        "enable_truncate": true,
+        "only_passing": true
+   },
+  "enable_central_service_config": true,
+  "enable_script_checks": true,
+  "enable_syslog": true,
+  "encrypt": "qmS8tYJEi079eoYNAXetnnSZXDQXsrZOWWWooBiWWHs=",
+  "leave_on_terminate": true,
+  "log_level": "INFO",
+  "rejoin_after_leave": true,
+  "ports": [
+    {
+      "grpc": 8502
+    }
+  ],
+  "server": true,
+  "start_join": [
+      "172.24.4.173"
+   ],
+  "telemetry": [
+    {
+      "disable_hostname": true,
+      "prometheus_retention_time": "24h"
+    }
+  ],
+  "ui_config": [
+    {
+      "enabled": true,
+      "metrics_provider": "prometheus",
+      "metrics_proxy": [
+        {
+          "base_url": "http://$PROMETHEUS_IP_ADDR:9090"
+        }
+      ]
+    }
+  ]
+}

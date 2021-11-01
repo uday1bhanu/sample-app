@@ -25,6 +25,8 @@ kind: Deployment
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "1"
+    consul.hashicorp.com/connect-inject: 'true'
+    consul.hashicorp.com/connect-service-upstreams: 'about:8081,location:8082,joke:8083'
   labels:
     feature: "sample"
     app: "sample-app"
@@ -51,14 +53,13 @@ spec:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '8080'
         prometheus.io/path: '/actuator/prometheus'
+        consul.hashicorp.com/connect-inject: 'true'
     spec:
       volumes:
-      imagePullSecrets:
-      - name: 
       containers:
       - name: "sample-app"
         volumeMounts:
-        image: "uday1bhanu/sample-app:1.1.0"
+        image: "uday1bhanu/sample-app:1.1.1"
         ports:
           - name: api
             containerPort: 8080
@@ -78,6 +79,14 @@ spec:
         env:
         - name: JAVA_MAX_MEM_RATIO
           value: "80"
+        - name: DC_NAME
+          value: "dc1"
+        - name: CLUSTER_NAME
+          value: "servicemesh-1"
+        - name: VERSION
+          value: "v1"
+        - name: ZIPKIN_ENABLED
+          value: "false"
         - name: APP_USERNAME
           valueFrom:
             secretKeyRef:

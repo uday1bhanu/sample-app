@@ -1,0 +1,76 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: ingress-gateway-to-sample-app
+spec:
+  destination:
+    name: sample-app
+  sources:
+    - name: ingress-gateway
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: sample-app-to-about
+spec:
+  destination:
+    name: about
+  sources:
+    - name: sample-app
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: sample-app-to-location
+spec:
+  destination:
+    name: location
+  sources:
+    - name: sample-app
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: sample-app-to-joke
+spec:
+  destination:
+    name: joke
+  sources:
+    - name: sample-app
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: joke-to-dadjoke
+spec:
+  destination:
+    name: dadjoke
+  sources:
+    - name: joke
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: joke-to-geekjoke
+spec:
+  destination:
+    name: geekjoke
+  sources:
+    - name: joke
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: deny-all
+spec:
+  destination:
+    name: "*"
+  sources:
+    - name: "*"
+      action: deny
